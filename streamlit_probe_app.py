@@ -238,10 +238,10 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '60 66'):", "60 66")
-    GC_range_input = st.sidebar.text_input("Enter the desired %GC range (e.g., '40 60'):", "40 60")
-    pos_range_input = st.sidebar.text_input("Enter the desired SNP position range (e.g., '2 9'):", "2 9")
-    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+    tm_range = st.sidebar.slider("Desired Tm Range", 0, 100, (60, 66), 1)
+    GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
+    pos_range = st.sidebar.slider("Desired SNP Position Range", 0, 100, (4, 9), 1)
+        gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
     if not tm_range_input or not gblock or not GC_range_input or not pos_range_input:
         st.warning("Please fill all the fields")
