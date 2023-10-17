@@ -245,14 +245,14 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    
+    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
     tm_range = st.sidebar.slider("Desired Tm Range", 50, 70, (60, 66), 1)
     GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("Desired SNP Position Range", 1, 14, (4, 9), 1)    
     len_range = st.sidebar.slider("Desired probe length", 10, 14, (10, 14), 1)
     LNA_range = st.sidebar.slider("Desired number of LNA", 3, 6, (3, 6), 1)
     
-    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+
 
     if not gblock:
         st.warning("Please enter the gblock sequence.")
