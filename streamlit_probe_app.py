@@ -237,15 +237,24 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    tm_range = st.sidebar.slider("Desired Tm Range", 54, 70, (60, 66), 1)
-    GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
-    pos_range = st.sidebar.slider("Desired SNP Position Range", 3, 12, (4, 9), 1)
-    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+    while True:
+        tm_range = st.sidebar.slider("Desired Tm Range", 0, 100, (60, 66), 1)
+        GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
+        pos_range = st.sidebar.slider("Desired SNP Position Range", 0, 100, (4, 9), 1)
+        gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
-    if  not gblock:
-        st.warning("Please fill all the fields")
-        return
+        if not gblock:
+            st.warning("Please enter the gblock sequence.")
+        else:
+            try:
+                # Attempt to process the input
+                # Add your processing logic here
 
+                # If processing is successful, break out of the loop
+                break
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+                st.warning("Please provide valid input and try again.")
       
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
