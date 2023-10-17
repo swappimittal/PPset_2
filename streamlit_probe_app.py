@@ -209,7 +209,7 @@ def filter_snp_pos(probe_para_dict, pos_range=(40, 50)):
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
-        probe = probe.upper()
+        #probe = probe.upper()
         probe = ''.join([char for char in probe if char != "*"])
         probe_info = {"Probe": probe}
         probe_info.update(parameters)
