@@ -229,7 +229,7 @@ def export_probe_data_to_excel(probe_dict, probe_name):
 # Your functions here (formatted_probe_dict, excel_probe_dict, main, etc.)
 
 def main():
-    st.title("Probe generator")
+    st.title("Probe generator!")
 
     # Sidebar for user input
     st.sidebar.header("User Input")
