@@ -154,12 +154,6 @@ def calculate_Tm_values(probe_list):
         tm_dict[''.join(sub_sequence)] = tm  # Use ''.join to create a string key
     return tm_dict
 
-def filter_Tm_probes_2(tm_dict, tm_range=(40, 50)):
-    probes_to_remove = [probe for probe, tm in tm_dict.items() if not (tm_range[0] <= tm <= tm_range[1])]
-
-    for probe in probes_to_remove:
-        del tm_dict[probe]
-    return(tm_dict)
     
 def filter_Tm_probes_3(probe_para_dict, tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (tm_range[0] <= probe_para_dict[probe]["Tm"] <= tm_range[1])]
@@ -200,19 +194,6 @@ def add_snp_distance_parameter(probe_para_dict):
         probe_para_dict[probe]['snp position'] = snp_dist
     return probe_para_dict
   
-def filter_Tm_probes(master_probe_list, tm_dict, tm_range=(40, 50)):
-    filtered_master_probe_list = []
-    probe_counter = 0
-    for sublist in master_probe_list:
-        probe_sequence = ''.join(s for s in sublist)
-        probe_sequence = ''.join([char for char in probe_sequence if char != "*"])
-        tm_value = tm_dict.get(''.join(sublist), None)  # Use ''.join for the key
-        if tm_value is not None and tm_range[0] <= tm_value <= tm_range[1]:
-            filtered_master_probe_list.append(sublist)
-            probe_counter += 1
-            print(f"Probe {probe_counter} Count: {len(sublist)}, Sequence: {probe_sequence}, Tm: {tm_value:.2f}°C")
-    total_probes_printed = len(filtered_master_probe_list)
-    print("Total probes printed:", total_probes_printed)
 
 
 def display_probe_data(probe_dict):
