@@ -241,7 +241,7 @@ def main():
     tm_range = st.sidebar.slider("Desired Tm Range", 0, 100, (60, 66), 1)
     GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("Desired SNP Position Range", 0, 100, (4, 9), 1)
-        gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
     if not tm_range_input or not gblock or not GC_range_input or not pos_range_input:
         st.warning("Please fill all the fields")
