@@ -218,17 +218,22 @@ def export_probe_data_to_excel(probe_dict, probe_name):
         probe = probe.upper()
         probe = ''.join([char for char in probe if char != "*"])
         row = {"Probe": probe}
-        row.update(parameters)  # Add the parameters to the row
+        row.update(parameters)
         data.append(row)
     df = pd.DataFrame(data)
 
     # Export to an Excel file
     excel_file = f"probe_data_{probe_name}.xlsx"
     df.to_excel(excel_file, index=False)
+
+    # Display a download button
     st.write(f"Probe data exported to {excel_file}")
-
-# Your functions here (formatted_probe_dict, excel_probe_dict, main, etc.)
-
+    st.download_button(
+        label="Download Excel File",
+        data=df.to_excel(None, index=False).getvalue(),
+        key=f"download_{probe_name}.xlsx",
+        file_name=f"probe_data_{probe_name}.xlsx"
+    )
 def main():
     st.title("Probe generator!")
 
@@ -264,7 +269,7 @@ def main():
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     if st.button("Export Excel for Probe 1"):
-        export_probe_data_to_excel(probe_dict_seq1, "Probe1")
+        export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
 
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
@@ -278,7 +283,7 @@ def main():
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
     if st.button("Export Excel for Probe 2"):
-        export_probe_data_to_excel(probe_dict_seq2, "Probe2")
+        export_probe_data_to_excel(probe_dict_seq2, input_seq[seq_2] + "_allele")
 
 if __name__ == "__main__":
     main()
