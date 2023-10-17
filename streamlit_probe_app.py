@@ -155,13 +155,6 @@ def calculate_Tm_values(probe_list):
     return tm_dict
 
     
-def filter_Tm_probes_3(probe_para_dict, tm_range=(40, 50)):
-    probes_to_remove = [probe for probe in probe_para_dict if not (tm_range[0] <= probe_para_dict[probe]["Tm"] <= tm_range[1])]
-    
-    for probe in probes_to_remove:
-        del probe_para_dict[probe]
-    
-    return probe_para_dict
 def create_probe_parameter_dict(tm_dict):
     probe_para_dict = {}  # Create a new dictionary to store the modified values
     for probe in tm_dict:
@@ -193,7 +186,25 @@ def add_snp_distance_parameter(probe_para_dict):
         snp_dist = max(0, max_distance)
         probe_para_dict[probe]['snp position'] = snp_dist
     return probe_para_dict
-  
+
+def filter_Tm_probes(probe_para_dict, tm_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (tm_range[0] <= probe_para_dict[probe]["Tm"] <= tm_range[1])]
+    
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    
+    return probe_para_dict  
+def filter_GC_probes(probe_para_dict, GC_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (GC_range[0] <= probe_para_dict[probe]['% GC content'] <= GC_range[1])]
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    return probe_para_dict  
+
+def filter_snp_pos(probe_para_dict, pos_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (pos_range[0] <= probe_para_dict[probe]['snp position'] <= pos_range[1])] 
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    return probe_para_dict  
 
 
 def display_probe_data(probe_dict):
@@ -227,15 +238,18 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '62 67'):", "60 66")
-    
+    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., "60 66"):", "60 66")
+    GC_range_input = st.sidebar.text_input("Enter the desired %GC range (e.g., "40 60"):", "40 60")
+    pos_range_input = st.sidebar.text_input("Enter the desired snp position range (e.g., "2 9"):", "2 9")
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
-    if not tm_range_input or not gblock:
-        st.warning("Please enter both the Tm range and gblock sequence.")
+    if not tm_range_input or not gblock or not GC_range_input or not pos_range_input  :
+        st.warning("Please fill all the fields")
         return
 
     tm_range = tm_range_input.split()
+    GC_range = GC_range_input.split()
+    pos_range = pos_range_input.spli()
 
     if len(tm_range) != 2:
         st.warning("Invalid Tm range format. Please enter two values separated by a space.")
@@ -252,7 +266,9 @@ def main():
     master_probe_list_seq1 = remove_3primeG_5primeG(remove_3G_3C(master_probe_list_seq1))
     tm_dict_seq1 = calculate_Tm_values(master_probe_list_seq1) 
     probe_dict_seq1 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq1)))))
-    filtered_probes_seq1 = filter_Tm_probes_3(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq1 = filter_GC_probes(probe_dict_seq1, (int(GC_range[0]), int(GC_range[1])))
+    filtered_probes_seq1 = filter_pos_probes(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -268,7 +284,10 @@ def main():
     tm_dict_seq2 = calculate_Tm_values(master_probe_list_seq2)
     
     probe_dict_seq2 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq2)))))
-    filtered_probes_seq2 = filter_Tm_probes_3(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq2 = filter_GC_probes(probe_dict_seq2, (int(GC_range[0]), int(GC_range[1])))
+    filtered_probes_seq2 = filter_pos_probes(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
+    # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
