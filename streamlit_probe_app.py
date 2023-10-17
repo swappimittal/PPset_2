@@ -260,7 +260,7 @@ def main():
     probe_dict_seq1 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq1)))))
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     filtered_probes_seq1 = filter_GC_probes(probe_dict_seq1, (int(GC_range[0]), int(GC_range[1])))
-    #filtered_probes_seq1 = filter_pos_probes(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
+    filtered_probes_seq1 = filter_pos_probes(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -278,7 +278,7 @@ def main():
     probe_dict_seq2 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq2)))))
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     filtered_probes_seq2 = filter_GC_probes(probe_dict_seq2, (int(GC_range[0]), int(GC_range[1])))
-    #filtered_probes_seq2 = filter_pos_probes(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
+    filtered_probes_seq2 = filter_pos_probes(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
