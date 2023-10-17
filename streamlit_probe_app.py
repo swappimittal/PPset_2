@@ -262,7 +262,9 @@ def main():
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     if st.button("Export Excel for Probe 1"):
-        export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
+        excel_file_path = export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
+        st.write(f"Probe data exported to {excel_file_path}")
+        st.markdown(f"Download the Excel file [here]({excel_file_path})")
 
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
@@ -276,7 +278,9 @@ def main():
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
     if st.button("Export Excel for Probe 2"):
-        export_probe_data_to_excel(probe_dict_seq2, input_seq[seq_2] + "_allele")
+        excel_file_path = export_probe_data_to_excel(probe_dict_seq2, input_seq[seq_2] + "_allele")
+        st.write(f"Probe data exported to {excel_file_path}")
+        st.markdown(f"Download the Excel file [here]({excel_file_path})")
 
 if __name__ == "__main__":
     main()
