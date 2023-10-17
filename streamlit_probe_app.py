@@ -276,14 +276,16 @@ def main():
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     if st.button("Export to Excel"):
-        df = export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
+        try:
+            df = export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
 
-        # Create a download link for the Excel file
-        excel_file = df.to_excel(index=False, engine='openpyxl')
-        b64 = base64.b64encode(excel_file.encode()).decode()
-        href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{probe_name}.xlsx">Download Excel File</a>'
-        st.markdown(href, unsafe_allow_html=True)
-
+            # Create a download link for the Excel file
+            excel_file = df.to_excel(index=False, engine='openpyxl')
+            b64 = base64.b64encode(excel_file.encode()).decode()
+            href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{probe_name}.xlsx">Download Excel File</a>'
+            st.markdown(href, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"An error occurred: {str(e)}")
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
     master_probe_list_seq2 = generate_master_probe_list(sub_sequences_seq2, valid_permutations)
