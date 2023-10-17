@@ -239,7 +239,7 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '62 67'):")
+    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '62 67'):", "60 66")
     
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
