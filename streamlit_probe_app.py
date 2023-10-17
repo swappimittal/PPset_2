@@ -222,18 +222,11 @@ def export_probe_data_to_excel(probe_dict, probe_name):
         data.append(row)
     df = pd.DataFrame(data)
 
-    # Export to an Excel file
-    excel_file = f"probe_data_{probe_name}.xlsx"
-    df.to_excel(excel_file, index=False)
+    # Define the path where you want to save the Excel file
+    excel_file_path = f"probe_data_{probe_name}.xlsx"
+    df.to_excel(excel_file_path, index=False)
 
-    # Display a download button
-    st.write(f"Probe data exported to {excel_file}")
-    st.download_button(
-        label="Download Excel File",
-        data=df.to_excel(None, index=False).getvalue(),
-        key=f"download_{probe_name}.xlsx",
-        file_name=f"probe_data_{probe_name}.xlsx"
-    )
+    return excel_file_path
 def main():
     st.title("Probe generator!")
 
