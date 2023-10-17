@@ -276,7 +276,7 @@ def main():
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     if st.button("Export to Excel"):
-        df = export_probe_data_to_excel(probe_dict, probe_name)
+        df = export_probe_data_to_excel(probe_dict_seq1, input_seq[seq_1] + "_allele")
 
         # Create a download link for the Excel file
         excel_file = df.to_excel(index=False, engine='openpyxl')
