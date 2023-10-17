@@ -243,7 +243,7 @@ def main():
     pos_range = st.sidebar.slider("Desired SNP Position Range", 0, 100, (4, 9), 1)
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
-    if not tm_range_input or not gblock or not GC_range_input or not pos_range_input:
+    if  not gblock:
         st.warning("Please fill all the fields")
         return
 
@@ -251,10 +251,6 @@ def main():
     GC_range = GC_range_input.split()
     pos_range = pos_range_input.split()
     
-    if len(tm_range) != 2:
-        st.warning("Invalid Tm range format. Please enter two values separated by a space.")
-        return
-
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
