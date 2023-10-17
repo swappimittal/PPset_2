@@ -7,6 +7,13 @@ from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
 
 def get_variant_regions(gblock):
+    gblock = gblock.replace(" ", "")
+    acceptable_characters = ["a","c","t","g","A","T","G","C","[","]","/","\"]
+    # Create a translation table to remove characters not in acceptable_characters
+    translation_table = str.maketrans("", "", "".join(c for c in gblock if c not in acceptable_characters))
+    
+    # Apply the translation table to gblock
+    gblock = gblock.translate(translation_table)
     seq_before_snp = gblock[gblock.index('/') - 12:gblock.index('/') - 2]
     seq_after_snp = gblock[gblock.index('/') + 3:gblock.index('/') + 13]
     variant_1 = gblock[gblock.index('/') - 1]
