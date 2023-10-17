@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import itertools
+import openpyxl 
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
 
@@ -234,6 +235,7 @@ def main():
     # Sidebar for user input
     st.sidebar.header("User Input")
     tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '62 67'):")
+    
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
     if not tm_range_input or not gblock:
