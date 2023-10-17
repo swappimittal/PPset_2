@@ -209,7 +209,7 @@ def filter_snp_pos(probe_para_dict, pos_range=(40, 50)):
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
-        #probe = probe.upper()
+        probe = probe.upper()
         probe = ''.join([char for char in probe if char != "*"])
         probe_info = {"Probe": probe}
         probe_info.update(parameters)
@@ -239,7 +239,7 @@ def main():
     st.sidebar.header("User Input")
     tm_range = st.sidebar.slider("Desired Tm Range", 54, 70, (60, 66), 1)
     GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
-    pos_range = st.sidebar.slider("Desired SNP Position Range", 3, 10, (4, 9), 1)
+    pos_range = st.sidebar.slider("Desired SNP Position Range", 3, 12, (4, 9), 1)
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
     if  not gblock:
