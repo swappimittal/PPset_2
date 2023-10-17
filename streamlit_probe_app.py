@@ -204,8 +204,16 @@ def filter_snp_pos(probe_para_dict, pos_range=(40, 50)):
     for probe in probes_to_remove:
         del probe_para_dict[probe]
     return probe_para_dict  
-
-
+def filter_length_probe(probe_para_dict, len_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (len_range[0] <= probe_para_dict[probe]['probe length'] <= len_range[1])] 
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    return probe_para_dict  
+def filter_LNA_count_probe(probe_para_dict, LNA_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (LNA_range[0] <= probe_para_dict[probe]['LNA count'] <= LNA_range[1])] 
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    return probe_para_dict  
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
@@ -240,7 +248,10 @@ def main():
     
     tm_range = st.sidebar.slider("Desired Tm Range", 50, 70, (60, 66), 1)
     GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
-    pos_range = st.sidebar.slider("Desired SNP Position Range", 1, 14, (4, 9), 1)
+    pos_range = st.sidebar.slider("Desired SNP Position Range", 1, 14, (4, 9), 1)    
+    len_range = st.sidebar.slider("Desired probe length", 10, 14, (10, 14), 1)
+    LNA_range = st.sidebar.slider("Desired number of LNA", 3, 6, (3, 6), 1)
+    
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
     if not gblock:
@@ -261,6 +272,8 @@ def main():
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     filtered_probes_seq1 = filter_GC_probes(probe_dict_seq1, (int(GC_range[0]), int(GC_range[1])))
     filtered_probes_seq1 = filter_snp_pos(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
+    filtered_probes_seq1 = filter_length_probe(probe_dict_seq1, (int(len_range[0]), int(len_range[1])))
+    filtered_probes_seq1 = filter_LNA_count_probe(probe_dict_seq1, (int(LNA_range[0]), int(LNA_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -279,6 +292,8 @@ def main():
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     filtered_probes_seq2 = filter_GC_probes(probe_dict_seq2, (int(GC_range[0]), int(GC_range[1])))
     filtered_probes_seq2 = filter_snp_pos(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
+    filtered_probes_seq2 = filter_length_probe(probe_dict_seq2, (int(len_range[0]), int(len_range[1])))
+    filtered_probes_seq2 = filter_LNA_count_probe(probe_dict_seq2, (int(LNA_range[0]), int(LNA_range[1])))
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
