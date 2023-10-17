@@ -12,7 +12,7 @@ def get_variant_regions(gblock):
     variant_2 = gblock[gblock.index('/') + 1]
     seq_1 = seq_before_snp + variant_1 + seq_after_snp
     seq_2 = seq_before_snp + variant_2 + seq_after_snp
-    return {seq_1:variant_1, seq_2:varint_2}  # Return a dict containing the two sequences
+    return {seq_1:variant_1, seq_2:variant_2}  # Return a dict containing the two sequences
 
 def calculate_tm(sequence):
 
