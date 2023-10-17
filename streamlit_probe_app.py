@@ -182,8 +182,7 @@ def add_snp_distance_parameter(probe_para_dict):
     for probe in probe_para_dict:
         PROBE = ''.join([char for char in probe if char != "*" and char != "+"])
         distances = [PROBE.find(nucleotide) for nucleotide in 'atgc']
-        max_distance = max(distances)
-        snp_dist = max(0, max_distance)
+        snp_dist = max(distances)
         probe_para_dict[probe]['snp position'] = snp_dist
     return probe_para_dict
 
