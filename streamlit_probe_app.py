@@ -247,10 +247,7 @@ def main():
         st.warning("Please fill all the fields")
         return
 
-    tm_range = tm_range_input.split()
-    GC_range = GC_range_input.split()
-    pos_range = pos_range_input.split()
-    
+      
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
