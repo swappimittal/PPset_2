@@ -245,6 +245,7 @@ def main():
 
     if not gblock:
         st.warning("Please enter the gblock sequence.")
+        return
 
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
