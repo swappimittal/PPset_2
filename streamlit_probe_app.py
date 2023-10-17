@@ -1,5 +1,4 @@
-!pip install biopython
-!pip install streamlit
+
 import streamlit as st
 import pandas as pd
 import itertools
