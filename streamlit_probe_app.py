@@ -245,17 +245,7 @@ def main():
 
         if not gblock:
             st.warning("Please enter the gblock sequence.")
-        else:
-            try:
-                # Attempt to process the input
-                # Add your processing logic here
 
-                # If processing is successful, break out of the loop
-                break
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-                st.warning("Please provide valid input and try again.")
-      
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
