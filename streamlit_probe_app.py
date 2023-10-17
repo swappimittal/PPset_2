@@ -244,13 +244,13 @@ def main():
     st.title("Probe generator!")
 
     # Sidebar for user input
-    st.sidebar.header("User Input")
+    st.sidebar.header("Input Fields here:")
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
-    tm_range = st.sidebar.slider("Desired Tm Range", 50, 70, (60, 66), 1)
-    GC_range = st.sidebar.slider("Desired %GC Range", 0, 100, (40, 60), 1)
-    pos_range = st.sidebar.slider("Desired SNP Position Range", 1, 14, (4, 9), 1)    
-    len_range = st.sidebar.slider("Desired probe length", 10, 14, (10, 14), 1)
-    LNA_range = st.sidebar.slider("Desired number of LNA", 3, 6, (3, 6), 1)
+    tm_range = st.sidebar.slider("Aprox Tm Range", 50, 70, (60, 66), 1)
+    GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
+    pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
+    len_range = st.sidebar.slider("probe length", 10, 14, (10, 14), 1)
+    LNA_range = st.sidebar.slider("Number of LNA", 3, 6, (3, 6), 1)
     
 
 
