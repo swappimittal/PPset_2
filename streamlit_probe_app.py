@@ -259,7 +259,7 @@ def main():
     filtered_probes_seq1 = filter_Tm_probes_2(tm_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     probe_dict_seq1 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq1)))))
     # Display probe data and offer Excel export
-    st.header("Probes for" + input_seq[seq_1] + "allele")
+    st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     if st.button("Export Excel for Probe 1"):
         export_probe_data_to_excel(probe_dict_seq1, "Probe1")
@@ -273,7 +273,7 @@ def main():
     probe_dict_seq2 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq2)))))
 
     # Display probe data and offer Excel export
-    st.header("Probes for" + input_seq[seq_2] + "allele")
+    st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
     if st.button("Export Excel for Probe 2"):
         export_probe_data_to_excel(probe_dict_seq2, "Probe2")
