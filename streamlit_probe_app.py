@@ -238,19 +238,19 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("User Input")
-    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., "60 66"):", "60 66")
-    GC_range_input = st.sidebar.text_input("Enter the desired %GC range (e.g., "40 60"):", "40 60")
-    pos_range_input = st.sidebar.text_input("Enter the desired snp position range (e.g., "2 9"):", "2 9")
+    tm_range_input = st.sidebar.text_input("Enter the desired Tm range (e.g., '60 66'):", "60 66")
+    GC_range_input = st.sidebar.text_input("Enter the desired %GC range (e.g., '40 60'):", "40 60")
+    pos_range_input = st.sidebar.text_input("Enter the desired SNP position range (e.g., '2 9'):", "2 9")
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
 
-    if not tm_range_input or not gblock or not GC_range_input or not pos_range_input  :
+    if not tm_range_input or not gblock or not GC_range_input or not pos_range_input:
         st.warning("Please fill all the fields")
         return
 
     tm_range = tm_range_input.split()
     GC_range = GC_range_input.split()
-    pos_range = pos_range_input.spli()
-
+    pos_range = pos_range_input.split()
+    
     if len(tm_range) != 2:
         st.warning("Invalid Tm range format. Please enter two values separated by a space.")
         return
