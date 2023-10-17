@@ -160,7 +160,14 @@ def filter_Tm_probes_2(tm_dict, tm_range=(40, 50)):
     for probe in probes_to_remove:
         del tm_dict[probe]
     return(tm_dict)
-
+    
+def filter_Tm_probes_3(probe_para_dict, tm_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (tm_range[0] <= probe_para_dict[probe]["Tm"] <= tm_range[1])]
+    
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
+    
+    return probe_para_dict
 def create_probe_parameter_dict(tm_dict):
     probe_para_dict = {}  # Create a new dictionary to store the modified values
     for probe in tm_dict:
@@ -262,9 +269,9 @@ def main():
     sub_sequences_seq1 = generate_sub_sequences(seq_1)
     master_probe_list_seq1 = generate_master_probe_list(sub_sequences_seq1, valid_permutations)
     master_probe_list_seq1 = remove_3primeG_5primeG(remove_3G_3C(master_probe_list_seq1))
-    tm_dict_seq1 = calculate_Tm_values(master_probe_list_seq1)
-    filtered_probes_seq1 = filter_Tm_probes_2(tm_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
+    tm_dict_seq1 = calculate_Tm_values(master_probe_list_seq1) 
     probe_dict_seq1 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq1)))))
+    filtered_probes_seq1 = filter_Tm_probes_3(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -278,9 +285,9 @@ def main():
     master_probe_list_seq2 = generate_master_probe_list(sub_sequences_seq2, valid_permutations)
     master_probe_list_seq2 = remove_3primeG_5primeG(remove_3G_3C(master_probe_list_seq2))
     tm_dict_seq2 = calculate_Tm_values(master_probe_list_seq2)
-    filtered_probes_seq2 = filter_Tm_probes_2(tm_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
+    
     probe_dict_seq2 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq2)))))
-
+    filtered_probes_seq2 = filter_Tm_probes_3(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
