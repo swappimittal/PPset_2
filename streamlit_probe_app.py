@@ -1,11 +1,16 @@
 
-import streamlit as st
 import pandas as pd
 import itertools
 import openpyxl 
 import base64
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
+from __future__ import print_function
+from base64 import b64encode
+import requests
+import json
+from urllib import request, parse
+import http.client
 def get_access_token(client_id, client_secret, idt_username, idt_password):
     """
     Create the HTTP request, transmit it, and then parse the response for the 
