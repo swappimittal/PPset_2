@@ -291,6 +291,12 @@ def refine_Tm_values(probe_para_dict, token):
         PROBE = ''.join([char for char in PROBE if char != "*"])
         probe_para_dict[probe]["Tm"] = get_data_from_IDT(PROBE, token)
     return probe_para_dict
+
+def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
+    probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
+    
+    for probe in probes_to_remove:
+        del probe_para_dict[probe]
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
@@ -326,6 +332,7 @@ def main():
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
     len_range = st.sidebar.slider("probe length", 10, 14, (10, 14), 1)
     LNA_range = st.sidebar.slider("Number of LNA", 3, 6, (3, 6), 1)
+    aprox_tm_range =  (55, 70)
     
 
 
@@ -344,12 +351,13 @@ def main():
     master_probe_list_seq1 = remove_3primeG_5primeG(remove_3G_3C(master_probe_list_seq1))
     tm_dict_seq1 = calculate_Tm_values(master_probe_list_seq1) 
     probe_dict_seq1 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq1)))))
-    filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq1 = filter_aprox_Tm_probes(probe_dict_seq1, (int(aprox_tm_range[0]), int(aprox_tm_range[1])))
     filtered_probes_seq1 = filter_GC_probes(probe_dict_seq1, (int(GC_range[0]), int(GC_range[1])))
     filtered_probes_seq1 = filter_snp_pos(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
     filtered_probes_seq1 = filter_length_probe(probe_dict_seq1, (int(len_range[0]), int(len_range[1])))
     filtered_probes_seq1 = filter_LNA_count_probe(probe_dict_seq1, (int(LNA_range[0]), int(LNA_range[1])))
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
+    filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -374,12 +382,13 @@ def main():
     tm_dict_seq2 = calculate_Tm_values(master_probe_list_seq2)
     
     probe_dict_seq2 = add_LNA_count_parameter(add_snp_distance_parameter(add_GC_ratio_parameter(add_length_parameter(create_probe_parameter_dict(tm_dict_seq2)))))
-    filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
+    filtered_probes_seq2 = filter_aprox_Tm_probes(probe_dict_seq2, (int(aprox_tm_range[0]), int(aprox_tm_range[1])))
     filtered_probes_seq2 = filter_GC_probes(probe_dict_seq2, (int(GC_range[0]), int(GC_range[1])))
     filtered_probes_seq2 = filter_snp_pos(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
     filtered_probes_seq2 = filter_length_probe(probe_dict_seq2, (int(len_range[0]), int(len_range[1])))
     filtered_probes_seq2 = filter_LNA_count_probe(probe_dict_seq2, (int(LNA_range[0]), int(LNA_range[1])))
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
+    filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
