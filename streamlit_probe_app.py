@@ -1,11 +1,11 @@
-
+from __future__ import print_function
 import pandas as pd
 import itertools
 import openpyxl 
 import base64
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
-from __future__ import print_function
+
 from base64 import b64encode
 import requests
 import json
