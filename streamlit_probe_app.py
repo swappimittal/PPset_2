@@ -6,7 +6,71 @@ import openpyxl
 import base64
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
+def get_access_token(client_id, client_secret, idt_username, idt_password):
+    """
+    Create the HTTP request, transmit it, and then parse the response for the 
+    access token.
+    
+    The body_dict will also contain the fields "expires_in" that provides the 
+    time window the token is valid for (in seconds) and "token_type".
+    """
 
+    # Construct the HTTP request
+    authorization_string = b64encode(bytes(client_id + ":" + client_secret, "utf-8")).decode()
+    request_headers = { "Content-Type" : "application/x-www-form-urlencoded",
+                        "Authorization" : "Basic " + authorization_string }
+                    
+    data_dict = {   "grant_type" : "password",
+                    "scope" : "test",
+                    "username" : idt_username,
+                    "password" : idt_password }
+    request_data = parse.urlencode(data_dict).encode()
+
+    post_request = request.Request("https://www.idtdna.com/Identityserver/connect/token", 
+                                    data = request_data, 
+                                    headers = request_headers,
+                                    method = "POST")
+
+    # Transmit the HTTP request and get HTTP response
+    response = request.urlopen(post_request)
+
+    # Process the HTTP response for the desired data
+    body = response.read().decode()
+    
+    # Error and return the response from the endpoint if there was a problem
+    if (response.status != 200):
+        raise RuntimeError("Request failed with error code:" + response.status + "\nBody:\n" + body)
+    
+    body_dict = json.loads(body)
+    return body_dict["access_token"]
+def get_data_from_IDT(seq, token):
+    conn = http.client.HTTPSConnection("www.idtdna.com")
+
+    payload = json.dumps({
+        "Sequence": seq,
+        "NaConc": 50,
+        "MgConc": 3,
+        "DNTPsConc": 0.8,
+        "OligoConc": 0.25,
+        "NucleotideType": "DNA"
+    })
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/Analyze", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    
+    # Parse the JSON response
+    response_data = json.loads(data.decode("utf-8"))
+    
+    # Print only the "MeltTemp" value
+    melt_temp = response_data["MeltTemp"]
+    return(melt_temp)   
+    
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
     gblock = gblock.upper()
@@ -215,6 +279,12 @@ def filter_LNA_count_probe(probe_para_dict, LNA_range=(40, 50)):
     for probe in probes_to_remove:
         del probe_para_dict[probe]
     return probe_para_dict  
+def refine_Tm_values(probe_para_dict, token):
+    for probe in probe_para_dict:
+        PROBE = probe.upper()
+        PROBE = ''.join([char for char in PROBE if char != "*"])
+        probe_para_dict[probe]["Tm"] = get_data_from_IDT(PROBE, token)
+    return probe_para_dict
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
@@ -273,6 +343,7 @@ def main():
     filtered_probes_seq1 = filter_snp_pos(probe_dict_seq1, (int(pos_range[0]), int(pos_range[1])))
     filtered_probes_seq1 = filter_length_probe(probe_dict_seq1, (int(len_range[0]), int(len_range[1])))
     filtered_probes_seq1 = filter_LNA_count_probe(probe_dict_seq1, (int(LNA_range[0]), int(LNA_range[1])))
+    filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -302,6 +373,7 @@ def main():
     filtered_probes_seq2 = filter_snp_pos(probe_dict_seq2, (int(pos_range[0]), int(pos_range[1])))
     filtered_probes_seq2 = filter_length_probe(probe_dict_seq2, (int(len_range[0]), int(len_range[1])))
     filtered_probes_seq2 = filter_LNA_count_probe(probe_dict_seq2, (int(LNA_range[0]), int(LNA_range[1])))
+    filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
@@ -312,4 +384,9 @@ def main():
         st.markdown(f"Download the Excel file [here]({excel_file_path})")
 
 if __name__ == "__main__":
+    client_id = "swapnil.mittal"
+    client_secret = "f669c31a-1817-49ea-b8d4-d666dd1fb8bf"
+    idt_username = "Swappi.mittal"
+    idt_password = "Swappi_IDT"
+    token = get_access_token(client_id, client_secret, idt_username, idt_password)
     main()
