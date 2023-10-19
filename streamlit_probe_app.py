@@ -327,7 +327,7 @@ def main():
     # Sidebar for user input
     st.sidebar.header("Input Fields here:")
     gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
-    tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 0.5)
+    tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 1)
     GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
     len_range = st.sidebar.slider("probe length", 10, 14, (10, 14), 1)
