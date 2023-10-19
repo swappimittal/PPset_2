@@ -77,11 +77,12 @@ def get_data_from_IDT(seq, token):
     melt_temp = response_data["MeltTemp"]
     return(melt_temp)   
 
-def get_hairpin_data_from_IDT(seq_list, token):
+def get_hairpin_data_from_IDT(seq, token):
+    
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
     payload = json.dumps({
-  "Sequences": seq_list,
+  "Sequences": seq,
   "Parameters": {
     "NaConc": 50,
     "FoldingTemp": 25,
@@ -95,16 +96,16 @@ def get_hairpin_data_from_IDT(seq_list, token):
         'Authorization': 'Bearer ' + token
     }
 
-    conn.request("POST", "/restapi/v1/OligoAnalyzer/HairpinBatch", payload, headers)
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/Hairpin", payload, headers)
     res = conn.getresponse()
     data = res.read()
     
     # Parse the JSON response
     response_data = json.loads(data.decode("utf-8"))
     
-    # Print only the "MeltTemp" value
-    melt_temp = response_data
-    return(melt_temp)   
+    # Print only the "deltaG" value
+    delta_G = response_data["deltaG"]
+    return(delta_G)   
     
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
@@ -320,12 +321,19 @@ def refine_Tm_values(probe_para_dict, token):
         PROBE = ''.join([char for char in PROBE if char != "*"])
         probe_para_dict[probe]["Tm"] = get_data_from_IDT(PROBE, token)
     return probe_para_dict
-
+    
+def get_hairpin_values(probe_para_dict, token):
+    for probe in probe_para_dict:
+        PROBE = probe.upper()
+        PROBE = ''.join([char for char in PROBE if char != "*"])
+        probe_para_dict[probe]["Delta_G"] = get_hairpin_data_from_IDT(PROBE, token)
+    return probe_para_dict
+    
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
-    
     for probe in probes_to_remove:
         del probe_para_dict[probe]
+        
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
@@ -387,6 +395,7 @@ def main():
     filtered_probes_seq1 = filter_LNA_count_probe(probe_dict_seq1, (int(LNA_range[0]), int(LNA_range[1])))
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
+    get_hairpin_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -418,6 +427,7 @@ def main():
     filtered_probes_seq2 = filter_LNA_count_probe(probe_dict_seq2, (int(LNA_range[0]), int(LNA_range[1])))
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
+    get_hairpin_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
