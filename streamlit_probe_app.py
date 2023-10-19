@@ -332,7 +332,7 @@ def main():
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
     len_range = st.sidebar.slider("probe length", 10, 14, (10, 14), 1)
     LNA_range = st.sidebar.slider("Number of LNA", 3, 6, (3, 6), 1)
-    aprox_tm_range =  (55, 70)
+    aprox_tm_range = (58, 68)
     
 
 
