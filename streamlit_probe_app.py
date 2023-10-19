@@ -123,7 +123,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     response_data = json.loads(data.decode("utf-8"))
     
     # Print only the "deltaG" value
-    delta_G = str(response_data[0]["DeltaG"])
+    delta_G = str(response_data)
     return(delta_G)       
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
