@@ -104,7 +104,27 @@ def get_hairpin_data_from_IDT(seq, token):
     # Print only the "deltaG" value
     delta_G = str(response_data[0]["deltaG"])
     return(delta_G)   
+def get_selfdimer_data_from_IDT(seq, token):
     
+    conn = http.client.HTTPSConnection("www.idtdna.com")
+
+    payload = json.dumps(seq)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    
+    # Parse the JSON response
+    response_data = json.loads(data.decode("utf-8"))
+    
+    # Print only the "deltaG" value
+    delta_G = str(response_data[0]["DeltaG"])
+    return(delta_G)       
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
     gblock = gblock.upper()
@@ -324,7 +344,14 @@ def get_hairpin_values(probe_para_dict, token):
     for probe in probe_para_dict:
         PROBE = probe.upper()
         PROBE = ''.join([char for char in PROBE if char != "*"])
-        probe_para_dict[probe]["Delta_G"] = get_hairpin_data_from_IDT(PROBE, token)
+        probe_para_dict[probe]["Hairpin DeltaG"] = get_hairpin_data_from_IDT(PROBE, token)
+    return probe_para_dict
+    
+def get_selfdimer_values(probe_para_dict, token):
+    for probe in probe_para_dict:
+        PROBE = probe.upper()
+        PROBE = ''.join([char for char in PROBE if char != "*"])
+        probe_para_dict[probe]["Self Dimer DeltaG"] = get_selfdimer_data_from_IDT(PROBE, token)
     return probe_para_dict
     
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
@@ -394,6 +421,7 @@ def main():
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
+    get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -426,6 +454,7 @@ def main():
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
+    get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
