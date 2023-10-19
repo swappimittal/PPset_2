@@ -76,6 +76,35 @@ def get_data_from_IDT(seq, token):
     # Print only the "MeltTemp" value
     melt_temp = response_data["MeltTemp"]
     return(melt_temp)   
+
+def get_hairpin_data_from_IDT(seq_list, token):
+    conn = http.client.HTTPSConnection("www.idtdna.com")
+
+    payload = json.dumps({
+  "Sequences": seq_list,
+  "Parameters": {
+    "NaConc": 50,
+    "FoldingTemp": 25,
+    "MgConc": 3,
+    "NucleotideType": "DNA"
+  }
+})
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/HairpinBatch", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    
+    # Parse the JSON response
+    response_data = json.loads(data.decode("utf-8"))
+    
+    # Print only the "MeltTemp" value
+    melt_temp = response_data
+    return(melt_temp)   
     
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
