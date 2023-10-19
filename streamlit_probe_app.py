@@ -104,7 +104,7 @@ def get_hairpin_data_from_IDT(seq, token):
     response_data = json.loads(data.decode("utf-8"))
     
     # Print only the "deltaG" value
-    delta_G = response_data["deltaG"]
+    delta_G = response_data
     return(delta_G)   
     
 def get_variant_regions(gblock):
