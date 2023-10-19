@@ -82,14 +82,12 @@ def get_hairpin_data_from_IDT(seq, token):
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
     payload = json.dumps({
-  "Sequences": seq,
-  "Parameters": {
-    "NaConc": 50,
-    "FoldingTemp": 25,
-    "MgConc": 3,
-    "NucleotideType": "DNA"
-  }
-})
+        "Sequence": seq,
+        "NaConc": 50,
+  "FoldingTemp": 25,
+  "MgConc": 3,
+  "NucleotideType": "DNA"
+    })
 
     headers = {
         'Content-Type': 'application/json',
