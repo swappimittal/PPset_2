@@ -111,7 +111,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     payload = "?primary=" + seq 
 
     headers = {
-        'Accept: application/json',
+        'Accept': 'application/json',
         'Authorization': 'Bearer ' + token
     }
 
