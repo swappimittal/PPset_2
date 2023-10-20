@@ -125,7 +125,7 @@ def get_selfdimer_data_from_IDT(seq, token):
         return response_data
     else:
         print(f"Request failed with status code: {response.status_code}")
-        return None
+        return 'oop'
 
         
 def get_variant_regions(gblock):
