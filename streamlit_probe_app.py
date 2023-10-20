@@ -108,7 +108,7 @@ def get_hairpin_data_from_IDT(seq, token):
 def get_selfdimer_data_from_IDT(seq, token):
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
-    payload = json.dumps({"primary": seq})
+    payload = {"primary": seq}
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {token}'
