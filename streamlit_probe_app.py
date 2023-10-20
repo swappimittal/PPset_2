@@ -122,7 +122,7 @@ def get_selfdimer_data_from_IDT(seq, token):
         # Parse the JSON response
         response_data = response.json()
         # Return the entire response body
-        return response_data
+        return response_data[0]['DeltaG']
     else:
         print(f"Request failed with status code: {response.status_code}")
         return 'oop'
