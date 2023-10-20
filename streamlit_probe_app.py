@@ -104,36 +104,29 @@ def get_hairpin_data_from_IDT(seq, token):
     # Print only the "deltaG" value
     delta_G = str(response_data[0]["deltaG"])
     return(delta_G)   
+    
 def get_selfdimer_data_from_IDT(seq, token):
-    conn = http.client.HTTPSConnection("www.idtdna.com")
-
-    # Prepare the payload as a dictionary
-    payload = {
-        "primary": seq
-    }
-
-    # Convert the payload to a JSON string
-    payload_json = json.dumps(payload)
-
+    # Define the API endpoint and payload
+    api_url = "https://www.idtdna.com/restapi/v1/OligoAnalyzer/SelfDimer"
+    payload = {"primary": seq}
     headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'  # Set the content type to JSON
+        'Authorization': f'Bearer {token}'
     }
 
-    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload_json, headers)
-    res = conn.getresponse()
-    data = res.read()
+    # Send the POST request
+    response = requests.post(api_url, json=payload, headers=headers)
 
-    # Check if the response status code is 200 (OK)
-    if res.status == 200:
-        response_data = json.loads(data.decode("utf-8"))
-        # Print only the "deltaG" value
-        delta_G = response_data.get("deltaG")
-        return delta_G
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the JSON response
+        response_data = response.json()
+        # Return the entire response body
+        return response_data
     else:
-        print("Error: HTTP Status Code", res.status)
+        print(f"Request failed with status code: {response.status_code}")
         return None
+
         
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
