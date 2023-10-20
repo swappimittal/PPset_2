@@ -108,7 +108,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
-    payload = seq
+    payload = "?primary=" + seq 
 
     headers = {
         'Content-Type': 'application/json',
