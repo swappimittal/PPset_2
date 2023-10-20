@@ -119,13 +119,10 @@ def get_selfdimer_data_from_IDT(seq, token):
 
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
-        # Parse the JSON response
-        response_data = response.json()
-        # Return the entire response body
-        return response_data[0]['DeltaG']
+        # Print the entire response content
+        print(response.text)
     else:
         print(f"Request failed with status code: {response.status_code}")
-        return 'oop'
 
         
 def get_variant_regions(gblock):
