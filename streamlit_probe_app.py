@@ -111,11 +111,11 @@ def get_selfdimer_data_from_IDT(seq, token):
     payload = "?primary=" + seq 
 
     headers = {
-        'Content-Type': 'application/json',
+        'Accept: application/json',
         'Authorization': 'Bearer ' + token
     }
 
-    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer" + payload, headers)
     res = conn.getresponse()
     data = res.read()
     
