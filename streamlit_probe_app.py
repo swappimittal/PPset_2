@@ -106,24 +106,24 @@ def get_hairpin_data_from_IDT(seq, token):
     return(delta_G)   
     
 def get_selfdimer_data_from_IDT(seq, token):
-    # Define the API endpoint and payload
-    api_url = "https://www.idtdna.com/restapi/v1/OligoAnalyzer/SelfDimer"
-    payload = {"primary": seq}
+    conn = http.client.HTTPSConnection("www.idtdna.com")
+
+    payload = json.dumps({"primary": seq})
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {token}'
     }
 
-    # Send the POST request
-    response = requests.post(api_url, json=payload, headers=headers)
-
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Print the entire response content
-        return(response.text)
-    else:
-        return(f"Request failed with status code: {response.status_code}")
-
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    
+    # Parse the JSON response
+    response_data = json.loads(data.decode("utf-8"))
+    
+    # Print only the "deltaG" value
+    delta_G = str(response_data)
+    return(delta_G)   
         
 def get_variant_regions(gblock):
     gblock = gblock.replace(" ", "")
