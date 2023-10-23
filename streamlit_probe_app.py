@@ -456,9 +456,6 @@ def main():
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
     seq_2 = list(input_seq.keys())[1
-    variant_1 = input_seq[seq_1]
-    variant_2 = input_seq[seq_2]
-
     # Process seq_1
     sub_sequences_seq1 = generate_sub_sequences(seq_1)
     master_probe_list_seq1 = generate_master_probe_list(sub_sequences_seq1, valid_permutations)
@@ -473,7 +470,7 @@ def main():
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
-    get_missmatch_values(probe_dict_seq1,variant_2, token)
+    get_missmatch_values(probe_dict_seq1,input_seq[seq_2], token)
     #get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
@@ -507,7 +504,7 @@ def main():
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
-    get_missmatch_values(probe_dict_seq2,variant_1, token)
+    get_missmatch_values(probe_dict_seq2,input_seq[seq_1], token)
     #get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
