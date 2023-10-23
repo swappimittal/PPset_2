@@ -486,6 +486,7 @@ def main():
     if rev_comp:
         gblock = reverse_complement(gblock) 
     else:
+        gblock = gblock
 
     valid_permutations = get_valid_permutations()
     
