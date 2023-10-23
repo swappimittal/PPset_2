@@ -468,7 +468,10 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("Input Fields here:")
-    input_gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
+    input_gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+    gblock = clean_up_input(input_gblock)
+    
+
     tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 1)
     GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
@@ -476,16 +479,16 @@ def main():
     LNA_range = st.sidebar.slider("Number of LNA", 3, 6, (3, 6), 1)
     aprox_tm_range = (58, 68)
     
-
-
     if not input_gblock:
         st.warning("Please enter the gblock sequence.")
         return
+    rev_comp = st.sidebar.checkbox('reverse complement', value=False)
+    if rev_comp:
+    gblock = reverse_complement(gblock) 
+    else:
 
     valid_permutations = get_valid_permutations()
-    gblock = clean_up_input(input_gblock)
-    if st.sidebar.button('reverse complement'): 
-        gblock = reverse_complement(gblock)
+    
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
     seq_2 = list(input_seq.keys())[1]
