@@ -82,12 +82,15 @@ def get_missmatch_from_IDT(seq, comp_seq, token):
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
     payload = json.dumps({
-        "Sequence": seq,
-        "NaConc": 50,
+  "Settings": {
+    "Sequence": seq,
+    "NaConc": 50,
         "MgConc": 3,
         "DNTPsConc": 0.8,
         "OligoConc": 0.25
-    },"Sequence2": "comp_seq")
+  },
+  "Sequence2": comp_seq
+})
 
     headers = {
         'Content-Type': 'application/json',
