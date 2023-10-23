@@ -18,15 +18,15 @@ def reverse_complement(sequence):
     Compute the reverse complement of a DNA sequence without using external libraries.
 
     Args:
-        sequence (str): A DNA sequence (should contain only valid DNA bases).
+        sequence (str): A DNA sequence (may contain characters other than 'A', 'T', 'C', 'G').
 
     Returns:
         str: The reverse complement of the input sequence.
     """
     complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', "[" : "[", "/" :"/", "]":"]"}
     
-    # Reverse the sequence and complement each base
-    reverse_comp = ''.join([complement_dict[base] for base in reversed(sequence)])
+    # Reverse the sequence, complement each base, and handle unknown characters
+    reverse_comp = ''.join([complement_dict.get(base, base) for base in reversed(sequence)])
     
     return reverse_comp
 
