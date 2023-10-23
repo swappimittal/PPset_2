@@ -13,6 +13,23 @@ import json
 from urllib import request, parse
 import http.client
 
+def reverse_complement(sequence):
+    """
+    Compute the reverse complement of a DNA sequence without using external libraries.
+
+    Args:
+        sequence (str): A DNA sequence (should contain only valid DNA bases).
+
+    Returns:
+        str: The reverse complement of the input sequence.
+    """
+    complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', "[" : "[", "/" :"/", "]":"]"}
+    
+    # Reverse the sequence and complement each base
+    reverse_comp = ''.join([complement_dict[base] for base in reversed(sequence)])
+    
+    return reverse_comp
+
 def complement(sequence):
     """
     Compute the complement of a DNA sequence without reversing it.
@@ -23,7 +40,7 @@ def complement(sequence):
     Returns:
         str: The complement of the input sequence.
     """
-    complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
+    complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', "[" : "[", "/" :"/", "]":"]"}
     
     # Compute the complement for each base in the sequence
     comp_sequence = ''.join([complement_dict[base] for base in sequence])
@@ -173,8 +190,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     # Print only the "deltaG" value
     delta_G = str(response_data)
     return(delta_G)   
-        
-def get_variant_regions(gblock):
+def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
     gblock = gblock.upper()
     acceptable_characters = ['a', 'c', 't', 'g', 'A', 'T', 'G', 'C', '[', ']', '/',]
@@ -182,13 +198,15 @@ def get_variant_regions(gblock):
     translation_table = str.maketrans("", "", "".join(c for c in gblock if c not in acceptable_characters))
     # Apply the translation table to gblock
     gblock = gblock.translate(translation_table)
+    return gblock
+def get_variant_regions(gblock):
     seq_before_snp = gblock[gblock.index('/') - 12:gblock.index('/') - 2]
     seq_after_snp = gblock[gblock.index('/') + 3:gblock.index('/') + 13]
     variant_1 = gblock[gblock.index('/') - 1]
     variant_2 = gblock[gblock.index('/') + 1]
     seq_1 = seq_before_snp + variant_1 + seq_after_snp
     seq_2 = seq_before_snp + variant_2 + seq_after_snp
-    return {seq_1:variant_1, seq_2:variant_2}  # Return a dict containing the two sequences
+    return {seq_1:variant_1, seq_2:variant_2 }  # Return a dict containing the two sequences
 
 def calculate_tm(sequence):
 
@@ -465,9 +483,13 @@ def main():
         return
 
     valid_permutations = get_valid_permutations()
+    clean_up_input(gblock)
+    if st.button('reverse complement'): 
+        gblock = reverse_complement(gblock)
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
     seq_2 = list(input_seq.keys())[1]
+    
     # Process seq_1
     sub_sequences_seq1 = generate_sub_sequences(seq_1)
     master_probe_list_seq1 = generate_master_probe_list(sub_sequences_seq1, valid_permutations)
