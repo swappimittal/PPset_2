@@ -477,7 +477,7 @@ def main():
 
     tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 1)
     GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
-    pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
+    pos_range = st.sidebar.slider("SNP position from 5' end", 1, 14, (4, 9), 1)    
     len_range = st.sidebar.slider("probe length", 9, 14, (10, 10), 1)
     LNA_range = st.sidebar.slider("Number of LNA", 3, 7, (3, 6), 1)
     aprox_tm_range = (58, 68)
