@@ -13,6 +13,24 @@ import json
 from urllib import request, parse
 import http.client
 
+def complement(sequence):
+    """
+    Compute the complement of a DNA sequence without reversing it.
+
+    Args:
+        sequence (str): A DNA sequence (should contain only valid DNA bases).
+
+    Returns:
+        str: The complement of the input sequence.
+    """
+    complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
+    
+    # Compute the complement for each base in the sequence
+    comp_sequence = ''.join([complement_dict[base] for base in sequence])
+    
+    return comp_sequence
+
+
 def get_access_token(client_id, client_secret, idt_username, idt_password):
     """
     Create the HTTP request, transmit it, and then parse the response for the 
@@ -388,10 +406,10 @@ def get_mismatch_values(probe_para_dict, variant, token):
         PROBE = probe.upper()
         PROBE = ''.join([char for char in PROBE if char not in ['+', '*']])
         snp_pos = probe_para_dict[probe]['snp position']
-        comp_seq = Seq(PROBE).complement()
+        comp_seq = complement(PROBE)
         
         # Construct the mismatch sequence
-        mismatch_seq = comp_seq[:snp_pos - 1] + str(Seq(variant).complement()) + comp_seq[snp_pos:]
+        mismatch_seq = comp_seq[:snp_pos - 1] + scomplement(variant) + comp_seq[snp_pos:]
         
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
         #mismatch_value = get_mismatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
