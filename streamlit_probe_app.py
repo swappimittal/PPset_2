@@ -391,7 +391,7 @@ def get_mismatch_values(probe_para_dict, variant, token):
         comp_seq = Seq(PROBE).complement()
         
         # Construct the mismatch sequence
-        #mismatch_seq = comp_seq[:snp_pos - 1] + Seq(variant).complement() + comp_seq[snp_pos:]
+        mismatch_seq = comp_seq[:snp_pos - 1] + str(Seq(variant).complement()) + comp_seq[snp_pos:]
         
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
         #mismatch_value = get_mismatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
