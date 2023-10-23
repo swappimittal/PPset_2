@@ -78,7 +78,7 @@ def get_data_from_IDT(seq, token):
     melt_temp = response_data["MeltTemp"]
     return(melt_temp)   
     
-def get_missmatch_from_IDT(seq, comp_seq, token):
+def get_mismatch_from_IDT(seq, comp_seq, token):
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
     payload = json.dumps({
@@ -394,8 +394,8 @@ def get_mismatch_values(probe_para_dict, variant, token):
         mismatch_seq = comp_seq[:snp_pos - 1] + Seq(variant).complement() + comp_seq[snp_pos:]
         
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
-        mismatch_value = get_missmatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
-        probe_para_dict[probe]["Tm miss"] = mismatch_value
+        mismatch_value = get_mismatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
+        probe_para_dict[probe]["Tm miss"] = mismatch_seq
     return probe_para_dict
 
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
