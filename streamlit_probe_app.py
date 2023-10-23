@@ -485,6 +485,8 @@ def main():
     valid_permutations = get_valid_permutations()
     clean_up_input(gblock)
     if st.button('reverse complement'): 
+        gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
+        clean_up_input(gblock)
         gblock = reverse_complement(gblock)
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
