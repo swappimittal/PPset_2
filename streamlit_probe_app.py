@@ -412,8 +412,8 @@ def get_mismatch_values(probe_para_dict, variant, token):
         mismatch_seq = comp_seq[:snp_pos - 1] + complement(variant) + comp_seq[snp_pos:]
         
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
-        #mismatch_value = get_mismatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
-        probe_para_dict[probe]["Tm miss"] = mismatch_seq
+        mismatch_value = get_mismatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
+        probe_para_dict[probe]["Tm miss"] = mismatch_value
     return probe_para_dict
 
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
