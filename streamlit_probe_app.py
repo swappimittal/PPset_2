@@ -484,7 +484,7 @@ def main():
         return
     rev_comp = st.sidebar.checkbox('reverse complement', value=False)
     if rev_comp:
-    gblock = reverse_complement(gblock) 
+        gblock = reverse_complement(gblock) 
     else:
 
     valid_permutations = get_valid_permutations()
