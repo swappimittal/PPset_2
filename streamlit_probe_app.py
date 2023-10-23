@@ -12,6 +12,7 @@ import requests
 import json
 from urllib import request, parse
 import http.client
+
 def get_access_token(client_id, client_secret, idt_username, idt_password):
     """
     Create the HTTP request, transmit it, and then parse the response for the 
@@ -76,7 +77,34 @@ def get_data_from_IDT(seq, token):
     # Print only the "MeltTemp" value
     melt_temp = response_data["MeltTemp"]
     return(melt_temp)   
+    
+def get_missmatch_from_IDT(seq, comp_seq, token):
+    conn = http.client.HTTPSConnection("www.idtdna.com")
 
+    payload = json.dumps({
+        "Sequence": seq,
+        "NaConc": 50,
+        "MgConc": 3,
+        "DNTPsConc": 0.8,
+        "OligoConc": 0.25
+    },"Sequence2": "comp_seq")
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/TmMisMatch", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    
+    # Parse the JSON response
+    response_data = json.loads(data.decode("utf-8"))
+    
+    # Print only the "MeltTemp" value
+    missmatch_tm = response_data["MeltTemp"]
+    return(missmatch_tm)   
+    
 def get_hairpin_data_from_IDT(seq, token):
     
     conn = http.client.HTTPSConnection("www.idtdna.com")
@@ -304,7 +332,6 @@ def add_snp_distance_parameter(probe_para_dict):
         snp_dist = max(distances)
         probe_para_dict[probe]['snp position'] = snp_dist
     return probe_para_dict
-
 def filter_Tm_probes(probe_para_dict, tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (tm_range[0] <= probe_para_dict[probe]["Tm"] <= tm_range[1])]
     
@@ -353,7 +380,29 @@ def get_selfdimer_values(probe_para_dict, token):
         PROBE = ''.join([char for char in PROBE if char != "*"])
         probe_para_dict[probe]["Self Dimer DeltaG"] = get_selfdimer_data_from_IDT(PROBE, token)
     return probe_para_dict
-    
+def get_missmatch_values(probe_para_dict,variant, token):
+    for probe in probe_para_dict:
+        PROBE = probe.upper()
+        PROBE = ''.join([char for char in PROBE if char != "+"])
+        PROBE = ''.join([char for char in PROBE if char != "*"])
+        snp_pos = probe_para_dict[probe]['snp position']
+        comp_seq = Seq(PROBE).complement()
+        
+        # Construct the mismatch sequence
+        mismatch_seq = (
+            comp_seq[:snp_pos - 1] +
+            Seq(variant).complement() +
+            comp_seq[snp_pos:]
+        )
+        
+        # Use the get_mismatch_from_IDT function to fetch the mismatch value
+        probe_para_dict[probe]["Tm miss"] = get_mismatch_from_IDT(
+            probe_seq, mismatch_seq, token
+        )        comp_seq = PROBE.complement()[0,snp_pos-2] + variant.complement() + PROBE.complement()[snp_pos-1,-1]
+        probe_para_dict[probe]["Tm miss"] = get_missmatch_from_IDT(seq, comp_seq, token)
+    return probe_para_dict   
+        probe_para_dict[probe]["Self Dimer DeltaG"] = get_selfdimer_data_from_IDT(PROBE, token)
+    return probe_para_dict    
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
     for probe in probes_to_remove:
@@ -405,7 +454,9 @@ def main():
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
-    seq_2 = list(input_seq.keys())[1]
+    seq_2 = list(input_seq.keys())[1
+    variant_1 = input_seq[seq_1]
+    variant_2 = input_seq[seq_2]
 
     # Process seq_1
     sub_sequences_seq1 = generate_sub_sequences(seq_1)
@@ -421,6 +472,7 @@ def main():
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
+    get_missmatch_values(probe_dict_seq1,variant_2, token)
     #get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
@@ -454,6 +506,7 @@ def main():
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
+    get_missmatch_values(probe_dict_seq2,variant_1, token)
     #get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
