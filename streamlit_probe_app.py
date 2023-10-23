@@ -220,7 +220,7 @@ def calculate_tm(sequence):
 
 def get_valid_permutations():
     valid_permutations = []
-    length_range = range(8, 13)
+    length_range = range(7, 13)
 
     def has_5_or_6_consecutive_1s(sequence):
         consecutive_count = 0
@@ -236,7 +236,7 @@ def get_valid_permutations():
     for length in length_range:
         for perm in itertools.product([0, 1], repeat=length):
             perm_str = ''.join(map(str, perm))
-            if sum(perm) <= 6 and '111' in perm_str and not has_5_or_6_consecutive_1s(perm_str):
+            if sum(perm) <= 7 and '111' in perm_str and not has_5_or_6_consecutive_1s(perm_str):
                 valid_permutations.append('0' + perm_str + '0')
     return valid_permutations
 
@@ -246,7 +246,10 @@ def generate_sub_sequences(sequence):
     base_list[11] = "*" + base_list[11]
     base_list[9] = "*" + base_list[9]
     sub_sequences = []
-
+    
+    for i in range(0, 5):
+        sub_sequence = base_list[5+i:14+i]
+        sub_sequences.append(sub_sequence)    
     for i in range(0, 6):
         sub_sequence = base_list[4+i:14+i]
         sub_sequences.append(sub_sequence)
@@ -475,8 +478,8 @@ def main():
     tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 1)
     GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
-    len_range = st.sidebar.slider("probe length", 10, 14, (10, 10), 1)
-    LNA_range = st.sidebar.slider("Number of LNA", 3, 6, (3, 6), 1)
+    len_range = st.sidebar.slider("probe length", 9, 14, (10, 10), 1)
+    LNA_range = st.sidebar.slider("Number of LNA", 3, 7, (3, 6), 1)
     aprox_tm_range = (58, 68)
     
     if not input_gblock:
