@@ -484,7 +484,7 @@ def main():
 
     valid_permutations = get_valid_permutations()
     gblock = clean_up_input(input_gblock)
-    if st.stsidebar.button('reverse complement'): 
+    if st.sidebar.button('reverse complement'): 
         gblock = reverse_complement(gblock)
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
