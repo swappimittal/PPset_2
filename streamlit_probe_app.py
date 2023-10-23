@@ -468,7 +468,7 @@ def main():
 
     # Sidebar for user input
     st.sidebar.header("Input Fields here:")
-    gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
+    input_gblock = st.sidebar.text_input("Enter the gblock seq from ELN")    
     tm_range = st.sidebar.slider("Tm", 60, 67, (63, 65), 1)
     GC_range = st.sidebar.slider("GC content (%)", 0, 100, (40, 60), 1)
     pos_range = st.sidebar.slider("SNP position on the probe", 1, 14, (4, 9), 1)    
@@ -483,10 +483,8 @@ def main():
         return
 
     valid_permutations = get_valid_permutations()
-    clean_up_input(gblock)
+    gblock = clean_up_input(input_gblock)
     if st.button('reverse complement'): 
-        gblock = st.sidebar.text_input("Enter the gblock seq from ELN")
-        clean_up_input(gblock)
         gblock = reverse_complement(gblock)
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
