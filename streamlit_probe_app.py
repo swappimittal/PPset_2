@@ -383,20 +383,20 @@ def get_selfdimer_values(probe_para_dict, token):
         PROBE = ''.join([char for char in PROBE if char != "*"])
         probe_para_dict[probe]["Self Dimer DeltaG"] = get_selfdimer_data_from_IDT(PROBE, token)
     return probe_para_dict
-def get_missmatch_values(probe_para_dict,variant, token):
+def get_mismatch_values(probe_para_dict, variant, token):
     for probe in probe_para_dict:
         PROBE = probe.upper()
-        PROBE = ''.join([char for char in PROBE if char != "+"])
-        PROBE = ''.join([char for char in PROBE if char != "*"])
+        PROBE = ''.join([char for char in PROBE if char not in ['+', '*']])
         snp_pos = probe_para_dict[probe]['snp position']
         comp_seq = Seq(PROBE).complement()
         
         # Construct the mismatch sequence
-        mismatch_seq = (comp_seq[:snp_pos - 1] + Seq(variant).complement() + comp_seq[snp_pos:])
-        #get_mismatch_from_IDT(probe_seq, mismatch_seq, token)
+        mismatch_seq = comp_seq[:snp_pos - 1] + Seq(variant).complement() + comp_seq[snp_pos:]
+        
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
-        probe_para_dict[probe]["Tm miss"] =  mismatch_seq         
-    return probe_para_dict   
+        mismatch_value = get_missmatch_from_IDT(probe_seq, mismatch_seq, token)  # Replace probe_seq with the correct value
+        probe_para_dict[probe]["Tm miss"] = mismatch_value
+    return probe_para_dict
 
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
@@ -464,7 +464,7 @@ def main():
     filtered_probes_seq1 = refine_Tm_values(probe_dict_seq1, token)
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
-    get_missmatch_values(probe_dict_seq1,input_seq[seq_2], token)
+    get_mismatch_values(probe_dict_seq1,input_seq[seq_2], token)
     #get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
@@ -498,7 +498,7 @@ def main():
     filtered_probes_seq2 = refine_Tm_values(probe_dict_seq2, token)
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
-    get_missmatch_values(probe_dict_seq2,input_seq[seq_1], token)
+    get_mismatch_values(probe_dict_seq2,input_seq[seq_1], token)
     #get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
