@@ -455,7 +455,7 @@ def main():
     valid_permutations = get_valid_permutations()
     input_seq = get_variant_regions(gblock)
     seq_1 = list(input_seq.keys())[0]
-    seq_2 = list(input_seq.keys())[1
+    seq_2 = list(input_seq.keys())[1]
     # Process seq_1
     sub_sequences_seq1 = generate_sub_sequences(seq_1)
     master_probe_list_seq1 = generate_master_probe_list(sub_sequences_seq1, valid_permutations)
