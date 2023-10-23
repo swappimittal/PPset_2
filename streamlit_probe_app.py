@@ -401,11 +401,9 @@ def get_missmatch_values(probe_para_dict,variant, token):
         # Use the get_mismatch_from_IDT function to fetch the mismatch value
         probe_para_dict[probe]["Tm miss"] = get_mismatch_from_IDT(
             probe_seq, mismatch_seq, token
-        )        comp_seq = PROBE.complement()[0,snp_pos-2] + variant.complement() + PROBE.complement()[snp_pos-1,-1]
-        probe_para_dict[probe]["Tm miss"] = get_missmatch_from_IDT(seq, comp_seq, token)
+        )          
     return probe_para_dict   
-        probe_para_dict[probe]["Self Dimer DeltaG"] = get_selfdimer_data_from_IDT(PROBE, token)
-    return probe_para_dict    
+
 def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
     for probe in probes_to_remove:
