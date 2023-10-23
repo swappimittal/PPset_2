@@ -478,7 +478,7 @@ def main():
     
 
 
-    if not gblock:
+    if not input_gblock:
         st.warning("Please enter the gblock sequence.")
         return
 
