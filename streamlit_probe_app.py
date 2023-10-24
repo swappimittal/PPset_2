@@ -6,7 +6,6 @@ import openpyxl
 import base64
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp
-
 from base64 import b64encode
 import requests
 import json
