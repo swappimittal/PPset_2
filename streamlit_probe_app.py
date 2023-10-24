@@ -488,7 +488,7 @@ def main():
     display_probe_data(probe_dict_seq1)
     probe_name = f"{input_seq[seq_1]}_allele"
     if st.button("Export to Excel"):
-        excel_file = export_probe_data_to_excel(probe_dict_seq2, "Probe_data_2")
+        excel_file = export_probe_data_to_excel(probe_dict_seq1, "Probe_data_2")
         st.success(f"Data exported to Excel file: {excel_file}")
 
 # Check if the Excel file has been generated and display the download button
