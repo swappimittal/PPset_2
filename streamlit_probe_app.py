@@ -419,7 +419,25 @@ def filter_aprox_Tm_probes(probe_para_dict, aprox_tm_range=(40, 50)):
     probes_to_remove = [probe for probe in probe_para_dict if not (aprox_tm_range[0] <= probe_para_dict[probe]["Tm"] <= aprox_tm_range[1])]
     for probe in probes_to_remove:
         del probe_para_dict[probe]
-        
+def display_probe_data_2(probe_dict):
+    probe_data = []
+    for probe, parameters in probe_dict.items():
+        probe = probe.upper()
+        probe = ''.join([char for char in probe if char != "*"])
+        probe_info = {"Probe": probe}
+        probe_info.update(parameters)
+        probe_data.append(probe_info)
+
+    # Convert the data to a Pandas DataFrame
+    df = pd.DataFrame(probe_data)
+
+    # Display the DataFrame with sorting capabilities
+    sorted_df = st.dataframe(df)
+
+    # Allow sorting of the DataFrame by column
+    for col in sorted_df.columns:
+        sorted_df = sorted_df.sort_values(by=[col])
+        st.dataframe(sorted_df)        
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
@@ -487,7 +505,7 @@ def main():
     #get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
-    display_probe_data(probe_dict_seq1)
+    display_probe_data_2(probe_dict_seq1)
     probe_name = f"{input_seq[seq_1]}_allele"
     if st.button("Export probes 1 to Excel"):
         excel_name = 'probes1'
@@ -522,7 +540,7 @@ def main():
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
-    display_probe_data(probe_dict_seq2)
+    display_probe_data_2(probe_dict_seq2)
     if st.button("Export probes 2 to Excel"):
         excel_name = 'probes2'
         excel_file = export_probe_data_to_excel(probe_dict_seq2, excel_name)
