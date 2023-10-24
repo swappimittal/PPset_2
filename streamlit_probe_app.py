@@ -491,9 +491,13 @@ def main():
         excel_file = export_probe_data_to_excel(probe_dict_seq1, "Probe_data_2")
         st.success(f"Data exported to Excel file: {excel_file}")
 
-# Check if the Excel file has been generated and display the download button
     if 'excel_file' in locals():
-        st.markdown(f"[Download Excel File](data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{excel_file})")
+        st.download_button(
+            label="Download Excel File",
+            data=excel_file,
+            key="download_excel",
+            file_name=f"{excel_file}"
+        )
 
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
@@ -519,10 +523,13 @@ def main():
     if st.button("Export probes 2 to Excel"):
         excel_file = export_probe_data_to_excel(probe_dict_seq2, "Probe_data_2")
         st.success(f"Data exported to Excel file: {excel_file}")
-
-# Check if the Excel file has been generated and display the download button
     if 'excel_file' in locals():
-        st.markdown(f"[Download Excel File](data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{excel_file})")
+        st.download_button(
+            label="Download Excel File",
+            data=excel_file,
+            key="download_excel",
+            file_name=f"{excel_file}"
+        )
 
 if __name__ == "__main__":
     client_id = "swapnil.mittal"
