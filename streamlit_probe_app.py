@@ -431,17 +431,12 @@ def display_probe_data(probe_dict):
 
     # Display as a table
     st.table(probe_data)
+
 def export_probe_data_to_excel(probe_dict, name):
     df = pd.DataFrame.from_dict(probe_dict, orient='index')
     excel_file = name + ".xlsx"
-    with io.BytesIO() as buffer:
-        with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-            df.to_excel(writer, sheet_name='Sheet1', index=True)
-        buffer.seek(0)
-        with open(excel_file, 'wb') as f:
-            f.write(buffer.read())
+    df.to_excel(excel_file, index=True)
     return excel_file
-
 def main():
     st.title("Probe generator!")
 
@@ -493,18 +488,19 @@ def main():
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
     probe_name = f"{input_seq[seq_1]}_allele"
-    if st.button("Export to Excel"):
-        excel_file = export_probe_data_to_excel(probe_dict_seq1, "Probe_data_2")
+    if st.button("Export probes 1 to Excel"):
+        excel_name = st.text_input("Enter Excel File Name:")
+        excel_file = export_probe_data_to_excel(probe_dict_seq1, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
 
-    if 'excel_file' in locals():
-        st.download_button(
-            label="Download Excel File",
-            data=excel_file,
-            key="download_excel",
-            file_name=f"{excel_file}"
-        )
-
+        # Create a download button for the Excel file
+        with open(excel_file, 'rb') as my_file:
+            st.download_button(
+                label="Download Excel File",
+                data=my_file,
+                file_name=f"{excel_name}.xlsx",
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
     master_probe_list_seq2 = generate_master_probe_list(sub_sequences_seq2, valid_permutations)
@@ -527,15 +523,18 @@ def main():
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
     if st.button("Export probes 2 to Excel"):
-        excel_file = export_probe_data_to_excel(probe_dict_seq2, "Probe_data_2")
+        excel_name = st.text_input("Enter Excel File Name:")
+        excel_file = export_probe_data_to_excel(probe_dict_seq2, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
-    if 'excel_file' in locals():
-        st.download_button(
-            label="Download Excel File",
-            data=excel_file,
-            key="download_excel",
-            file_name=f"{excel_file}"
-        )
+
+        # Create a download button for the Excel file
+        with open(excel_file, 'rb') as my_file:
+            st.download_button(
+                label="Download Excel File",
+                data=my_file,
+                file_name=f"{excel_name}.xlsx",
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
 
 if __name__ == "__main__":
     client_id = "swapnil.mittal"
