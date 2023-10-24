@@ -432,11 +432,11 @@ def display_probe_data(probe_dict):
     # Display as a table
     st.table(probe_data)
 
-def export_probe_data_to_excel(probe_dict, name):
-    for probe in probe_dict:
+def export_probe_data_to_excel(probe_para_dict, name):
+    for probe in probe_para_dict:
         probe = probe.upper()
         probe = ''.join([char for char in probe if char != "*"])
-    df = pd.DataFrame.from_dict(probe_dict, orient='index')
+    df = pd.DataFrame.from_dict(probe_para_dict, orient='index')
     excel_file = name + ".xlsx"
     df.to_excel(excel_file, index=True)
     return excel_file
