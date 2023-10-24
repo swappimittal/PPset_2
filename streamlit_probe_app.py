@@ -139,24 +139,23 @@ def get_hairpin_data_from_IDT(seq, token):
     return(delta_G)   
     
 def get_selfdimer_data_from_IDT(seq, token):
-    try:
-        conn = http.client.HTTPSConnection("www.idtdna.com")
-        payload = json.dumps({"primary": seq})
-        headers = {
+    conn = http.client.HTTPSConnection("www.idtdna.com")
+    payload = json.dumps({"primary": seq})
+    headers = {
             'Accept': 'application/json',
             'Authorization': f'Bearer {token}'
-        }
+    }
 
-        conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
-        res = conn.getresponse()
-        data = res.read()
+    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
 
         # Parse the JSON response
-        response_data = json.loads(data.decode("utf-8"))
+    response_data = json.loads(data.decode("utf-8"))
 
         # Access the "DeltaG" value
-        delta_G = response_data[0]["DeltaG"]
-        return delta_G
+    delta_G = response_data[0]["DeltaG"]
+    return delta_G
 
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
@@ -167,6 +166,7 @@ def clean_up_input(gblock):
     # Apply the translation table to gblock
     gblock = gblock.translate(translation_table)
     return gblock
+    
 def get_variant_regions(gblock):
     seq_before_snp = gblock[gblock.index('/') - 12:gblock.index('/') - 2]
     seq_after_snp = gblock[gblock.index('/') + 3:gblock.index('/') + 13]
