@@ -157,10 +157,6 @@ def get_selfdimer_data_from_IDT(seq, token):
         # Access the "DeltaG" value
         delta_G = response_data[0]["DeltaG"]
         return delta_G
-    except Exception as e:
-        return str(e)
-    finally:
-        conn.close()  
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
     gblock = gblock.upper()
