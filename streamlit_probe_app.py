@@ -1,4 +1,4 @@
-import PPSET_functions.py
+from PPSET_functions.py import *
 def main():
     st.title("Probe generator!")
 
