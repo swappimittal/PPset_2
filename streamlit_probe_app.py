@@ -429,17 +429,11 @@ def display_probe_data(probe_dict):
 
     # Display as a table
     st.table(probe_data)
-def export_probe_data_to_excel(probe_dict, probe_name):
-    data = []
-    for probe, parameters in probe_dict.items():
-        probe = probe.upper()
-        probe = ''.join([char for char in probe if char != "*"])
-        row = {"Probe": probe}
-        row.update(parameters)
-        data.append(row)
-    df = pd.DataFrame(data)
-
-    return df
+def export_probe_data_to_excel(probe_dict, name):
+    df = pd.DataFrame.from_dict(probe_dict, orient ='index')
+    excel_file = name + ".xlsx"
+    df.to_excel(excel_file, index=False)
+    return excel_file
 
 
 def main():
@@ -494,18 +488,16 @@ def main():
     display_probe_data(probe_dict_seq1)
     probe_name = f"{input_seq[seq_1]}_allele"
     if st.button("Export to Excel"):
-        try:
-            df = export_probe_data_to_excel(probe_dict_seq1, probe_name)
-
-            # Create a download link for the Excel file
-            excel_file = df.to_excel(index=False, engine='openpyxl', excel_writer=None)
-            b64 = base64.b64encode(excel_file.encode()).decode()
-            href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{probe_name}.xlsx">Download Excel File</a>'
-            st.markdown(href, unsafe_allow_html=True)
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
-    # Process seq_2
-
+        excel_name = st.text_input("Enter Excel File Name:")
+        excel_file = export_probe_data_to_excel(probe_dict_seq1, excel_name)
+        st.success(f"Data exported to Excel file: {excel_file}")
+    if 'excel_file' in locals():
+    st.download_button(
+        label="Download Excel File",
+        data=excel_file,
+        key="download_excel",
+        file_name=f"{excel_name}.xlsx"
+    )
     # Process seq_2
     sub_sequences_seq2 = generate_sub_sequences(seq_2)
     master_probe_list_seq2 = generate_master_probe_list(sub_sequences_seq2, valid_permutations)
@@ -527,10 +519,17 @@ def main():
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
-    if st.button("Export Excel for Probe 2"):
-        excel_file_path = export_probe_data_to_excel(probe_dict_seq2, input_seq[seq_2] + "_allele")
-        st.write(f"Probe data exported to {excel_file_path}")
-        st.markdown(f"Download the Excel file [here]({excel_file_path})")
+    if st.button("Export to Excel"):
+        excel_name = st.text_input("Enter Excel File Name:")
+        excel_file = export_probe_data_to_excel(probe_dict_seq2, excel_name)
+        st.success(f"Data exported to Excel file: {excel_file}")
+    if 'excel_file' in locals():
+    st.download_button(
+        label="Download Excel File",
+        data=excel_file,
+        key="download_excel",
+        file_name=f"{excel_name}.xlsx"
+    )
 
 if __name__ == "__main__":
     client_id = "swapnil.mittal"
