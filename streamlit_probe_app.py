@@ -150,7 +150,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     }
 
     response = requests.post(url, headers=headers, data=payload)
-    delta_G = response
+    delta_G = response.json()
     return delta_G
 
 def clean_up_input(gblock):
