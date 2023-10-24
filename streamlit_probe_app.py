@@ -139,23 +139,24 @@ def get_hairpin_data_from_IDT(seq, token):
     return(delta_G)   
     
 def get_selfdimer_data_from_IDT(seq, token):
-    conn = http.client.HTTPSConnection("www.idtdna.com")
-    payload = json.dumps({"primary": seq})
+    url = "https://www.idtdna.com/restapi/v1/OligoAnalyzer/SelfDimer"
     headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {token}'
-    }
+    'Accept': 'application/json',
+    'Authorization': 'Bearer 61cc7976dca735f664432f3169fecd08'
+}
 
-    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
+    payload = {
+    'primary': 'GAG+A+GCGA'
+}
 
-        # Parse the JSON response
-    response_data = json.loads(data.decode("utf-8"))
+    response = requests.post(url, headers=headers, data=payload)
 
-        # Access the "DeltaG" value
-    delta_G = response_data
-    return delta_G
+    if response.status_code == 200:
+        response_json = response.json()
+        delta_G = response_json.get("deltaG", "DeltaG value not found")
+        print(delta_G)
+    else:
+        print(f"Request failed with status code {response.status_code}")
 
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
