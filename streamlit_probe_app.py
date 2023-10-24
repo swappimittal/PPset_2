@@ -145,7 +145,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     'Authorization': 'Bearer 61cc7976dca735f664432f3169fecd08'
 }
 
-    payload = {
+     payload = {
     'primary': 'GAG+A+GCGA'
 }
 
@@ -153,7 +153,7 @@ def get_selfdimer_data_from_IDT(seq, token):
 
     if response.status_code == 200:
         response_json = response.json()
-        delta_G = response_json.get("deltaG", "DeltaG value not found")
+        delta_G = response_json.get("DeltaG", "DeltaG value not found")
         print(delta_G)
     else:
         print(f"Request failed with status code {response.status_code}")
