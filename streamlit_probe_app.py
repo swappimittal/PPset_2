@@ -492,7 +492,7 @@ def main():
         excel_file = export_probe_data_to_excel(probe_dict_seq1, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
     if 'excel_file' in locals():
-    st.download_button(
+        st.download_button(
         label="Download Excel File",
         data=excel_file,
         key="download_excel",
@@ -524,11 +524,11 @@ def main():
         excel_file = export_probe_data_to_excel(probe_dict_seq2, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
     if 'excel_file' in locals():
-    st.download_button(
-        label="Download Excel File",
-        data=excel_file,
-        key="download_excel",
-        file_name=f"{excel_name}.xlsx"
+        st.download_button(
+            label="Download Excel File",
+            data=excel_file,
+            key="download_excel",
+            file_name=f"{excel_name}.xlsx"
     )
 
 if __name__ == "__main__":
