@@ -489,7 +489,7 @@ def main():
     display_probe_data(probe_dict_seq1)
     probe_name = f"{input_seq[seq_1]}_allele"
     if st.button("Export probes 1 to Excel"):
-        excel_name = st.text_input("Enter Excel File Name:")
+        excel_name = 'probes1'
         excel_file = export_probe_data_to_excel(probe_dict_seq1, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
 
@@ -523,7 +523,7 @@ def main():
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
     if st.button("Export probes 2 to Excel"):
-        excel_name = st.text_input("Enter Excel File Name:")
+        excel_name = 'probes2'
         excel_file = export_probe_data_to_excel(probe_dict_seq2, excel_name)
         st.success(f"Data exported to Excel file: {excel_file}")
 
