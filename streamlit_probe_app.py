@@ -13,49 +13,17 @@ from urllib import request, parse
 import http.client
 
 def reverse_complement(sequence):
-    """
-    Compute the reverse complement of a DNA sequence without using external libraries.
-
-    Args:
-        sequence (str): A DNA sequence (may contain characters other than 'A', 'T', 'C', 'G').
-
-    Returns:
-        str: The reverse complement of the input sequence.
-    """
     complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', "[" : "[", "/" :"/", "]":"]"}
-    
-    # Reverse the sequence, complement each base, and handle unknown characters
     reverse_comp = ''.join([complement_dict.get(base, base) for base in reversed(sequence)])
-    
     return reverse_comp
 
 def complement(sequence):
-    """
-    Compute the complement of a DNA sequence without reversing it.
-
-    Args:
-        sequence (str): A DNA sequence (should contain only valid DNA bases).
-
-    Returns:
-        str: The complement of the input sequence.
-    """
     complement_dict = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', "[" : "[", "/" :"/", "]":"]"}
-    
-    # Compute the complement for each base in the sequence
     comp_sequence = ''.join([complement_dict[base] for base in sequence])
-    
     return comp_sequence
 
 
 def get_access_token(client_id, client_secret, idt_username, idt_password):
-    """
-    Create the HTTP request, transmit it, and then parse the response for the 
-    access token.
-    
-    The body_dict will also contain the fields "expires_in" that provides the 
-    time window the token is valid for (in seconds) and "token_type".
-    """
-
     # Construct the HTTP request
     authorization_string = b64encode(bytes(client_id + ":" + client_secret, "utf-8")).decode()
     request_headers = { "Content-Type" : "application/x-www-form-urlencoded",
@@ -84,6 +52,7 @@ def get_access_token(client_id, client_secret, idt_username, idt_password):
     
     body_dict = json.loads(body)
     return body_dict["access_token"]
+
 def get_data_from_IDT(seq, token):
     conn = http.client.HTTPSConnection("www.idtdna.com")
 
@@ -143,9 +112,8 @@ def get_mismatch_from_IDT(seq, comp_seq, token):
     return(missmatch_tm)   
     
 def get_hairpin_data_from_IDT(seq, token):
-    
+  
     conn = http.client.HTTPSConnection("www.idtdna.com")
-
     payload = json.dumps({
         "Sequence": seq,
         "NaConc": 50,
@@ -171,24 +139,28 @@ def get_hairpin_data_from_IDT(seq, token):
     return(delta_G)   
     
 def get_selfdimer_data_from_IDT(seq, token):
-    conn = http.client.HTTPSConnection("www.idtdna.com")
+    try:
+        conn = http.client.HTTPSConnection("www.idtdna.com")
+        payload = json.dumps({"primary": seq})
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {token}'
+        }
 
-    payload = json.dumps({"primary": seq})
-    headers = {
-        'Accept': 'application/json',
-        'Authorization': f'Bearer {token}'
-    }
+        conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
+        res = conn.getresponse()
+        data = res.read()
 
-    conn.request("POST", "/restapi/v1/OligoAnalyzer/SelfDimer", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    
-    # Parse the JSON response
-    response_data = json.loads(data.decode("utf-8"))
-    
-    # Print only the "deltaG" value
-    delta_G = str(response_data)
-    return(delta_G)   
+        # Parse the JSON response
+        response_data = json.loads(data.decode("utf-8"))
+
+        # Access the "DeltaG" value
+        delta_G = response_data.get("DeltaG", "DeltaG value not found")
+        return delta_G
+    except Exception as e:
+        return str(e)
+    finally:
+        conn.close()  
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
     gblock = gblock.upper()
@@ -511,7 +483,7 @@ def main():
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
     get_mismatch_values(probe_dict_seq1,input_seq[seq_2], token)
-    #get_selfdimer_values(probe_dict_seq1, token)
+    get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -545,7 +517,7 @@ def main():
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
     get_mismatch_values(probe_dict_seq2,input_seq[seq_1], token)
-    #get_selfdimer_values(probe_dict_seq2, token)
+    get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
