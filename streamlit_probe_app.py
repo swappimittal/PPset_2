@@ -142,11 +142,11 @@ def get_selfdimer_data_from_IDT(seq, token):
     url = "https://www.idtdna.com/restapi/v1/OligoAnalyzer/SelfDimer"
     headers = {
     'Accept': 'application/json',
-    'Authorization': 'Bearer 61cc7976dca735f664432f3169fecd08'
+    'Authorization': 'Bearer ' + token
 }
 
      payload = {
-    'primary': 'GAG+A+GCGA'
+    'primary': seq'
 }
 
     response = requests.post(url, headers=headers, data=payload)
