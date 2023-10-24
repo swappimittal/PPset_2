@@ -146,7 +146,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     }
 
     payload = {
-        'primary': seq  # Corrected the typo here (removed the extra single quote)
+        'primary': seq  
     }
 
     response = requests.post(url, headers=headers, data=payload)
