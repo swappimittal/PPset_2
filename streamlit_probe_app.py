@@ -433,7 +433,7 @@ def display_probe_data(probe_dict):
     st.table(probe_data)
 
 def export_probe_data_to_excel(probe_dict, name):
-    for probe, parameters in probe_dict.items():
+    for probe in probe_dict:
         probe = probe.upper()
         probe = ''.join([char for char in probe if char != "*"])
     df = pd.DataFrame.from_dict(probe_dict, orient='index')
