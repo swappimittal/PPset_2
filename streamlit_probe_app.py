@@ -150,10 +150,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     }
 
     response = requests.post(url, headers=headers, data=payload)
-
-    if response.status_code == 200:
-        response_json = response.json()
-        delta_G = response_json
+    delta_G = response_json
 
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
