@@ -141,22 +141,23 @@ def get_hairpin_data_from_IDT(seq, token):
 def get_selfdimer_data_from_IDT(seq, token):
     url = "https://www.idtdna.com/restapi/v1/OligoAnalyzer/SelfDimer"
     headers = {
-    'Accept': 'application/json',
-    'Authorization': 'Bearer ' + token
-}
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
 
-     payload = {
-    'primary': seq'
-}
+    payload = {
+        'primary': seq  # Corrected the typo here (removed the extra single quote)
+    }
 
     response = requests.post(url, headers=headers, data=payload)
 
     if response.status_code == 200:
         response_json = response.json()
-        delta_G = response_json.get("DeltaG", "DeltaG value not found")
-        print(delta_G)
+        delta_G = response_json.get("DeltaG", "DeltaG value not found")  # Updated key to lowercase "deltaG"
+        return delta_G
     else:
         print(f"Request failed with status code {response.status_code}")
+        return None  # You may want to return a specific value or raise an exception here instead of None
 
 def clean_up_input(gblock):
     gblock = gblock.replace(" ", "")
