@@ -488,7 +488,7 @@ def main():
     filtered_probes_seq1 = filter_Tm_probes(probe_dict_seq1, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq1, token)
     get_mismatch_values(probe_dict_seq1,input_seq[seq_2], token)
-    get_selfdimer_values(probe_dict_seq1, token)
+    #get_selfdimer_values(probe_dict_seq1, token)
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_1] + " allele")
     display_probe_data(probe_dict_seq1)
@@ -522,7 +522,7 @@ def main():
     filtered_probes_seq2 = filter_Tm_probes(probe_dict_seq2, (int(tm_range[0]), int(tm_range[1])))
     get_hairpin_values(probe_dict_seq2, token)
     get_mismatch_values(probe_dict_seq2,input_seq[seq_1], token)
-    get_selfdimer_values(probe_dict_seq2, token)
+    #get_selfdimer_values(probe_dict_seq2, token)
     # Display probe data and offer Excel export
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
