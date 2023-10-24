@@ -154,7 +154,7 @@ def get_selfdimer_data_from_IDT(seq, token):
     response_data = json.loads(data.decode("utf-8"))
 
         # Access the "DeltaG" value
-    delta_G = response_data[0]["DeltaG"]
+    delta_G = response_data
     return delta_G
 
 def clean_up_input(gblock):
