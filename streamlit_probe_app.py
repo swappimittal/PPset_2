@@ -516,7 +516,7 @@ def main():
     # Display probe data and offer Excel export
     st.header("Probes for " + input_seq[seq_2] + " allele")
     display_probe_data(probe_dict_seq2)
-    if st.button("Export to Excel"):
+    if st.button("Export probes 2 to Excel"):
         excel_file = export_probe_data_to_excel(probe_dict_seq2, "Probe_data_2")
         st.success(f"Data exported to Excel file: {excel_file}")
 
