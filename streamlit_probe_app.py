@@ -433,12 +433,14 @@ def display_probe_data(probe_dict):
     st.table(probe_data)
 def export_probe_data_to_excel(probe_dict, name):
     df = pd.DataFrame.from_dict(probe_dict, orient='index')
-    excel_file = io.BytesIO()
-    with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
-        df.to_excel(writer, sheet_name='Sheet1', index=False)
-    excel_file.seek(0)
+    excel_file = name + ".xlsx"
+    with io.BytesIO() as buffer:
+        with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name='Sheet1', index=True)
+        buffer.seek(0)
+        with open(excel_file, 'wb') as f:
+            f.write(buffer.read())
     return excel_file
-
 
 def main():
     st.title("Probe generator!")
