@@ -2,6 +2,7 @@ from __future__ import print_function
 import streamlit as st
 import pandas as pd
 import io
+import xlsxwriter
 import itertools
 import openpyxl 
 import base64
