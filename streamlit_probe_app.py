@@ -1,6 +1,7 @@
 from __future__ import print_function
 import streamlit as st
 import pandas as pd
+import io
 import itertools
 import openpyxl 
 import base64
@@ -430,9 +431,11 @@ def display_probe_data(probe_dict):
     # Display as a table
     st.table(probe_data)
 def export_probe_data_to_excel(probe_dict, name):
-    df = pd.DataFrame.from_dict(probe_dict, orient ='index')
-    excel_file = name + ".xlsx"
-    df.to_excel(excel_file, index=False)
+    df = pd.DataFrame.from_dict(probe_dict, orient='index')
+    excel_file = io.BytesIO()
+    with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
+        df.to_excel(writer, sheet_name='Sheet1', index=False)
+    excel_file.seek(0)
     return excel_file
 
 
