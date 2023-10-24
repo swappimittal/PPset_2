@@ -435,9 +435,14 @@ def display_probe_data_2(probe_dict):
     sorted_df = st.dataframe(df)
 
     # Allow sorting of the DataFrame by column
-    for col in sorted_df.columns:
-        sorted_df = sorted_df.sort_values(by=[col])
-        st.dataframe(sorted_df)        
+    column_to_sort = st.selectbox("Sort by Column", df.columns)
+    ascending = st.checkbox("Sort Ascending", True)
+    if ascending:
+        sorted_df = sorted_df.sort_values(by=column_to_sort, ascending=True)
+    else:
+        sorted_df = sorted_df.sort_values(by=column_to_sort, ascending=False)
+    
+    st.dataframe(sorted_df)      
 def display_probe_data(probe_dict):
     probe_data = []
     for probe, parameters in probe_dict.items():
